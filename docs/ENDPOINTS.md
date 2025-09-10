@@ -40,3 +40,4 @@
 | decrypt | POST | `/v1/x/decrypt` | [link](https://developer.japer.io#218739dc-adcf-4111-98bf-a6b850a90e4b) |
 | lookup | POST | `/v1/x/lookup` | [link](https://developer.japer.io#e38e344b-ca93-41a9-992c-5647dcb78fbd) |
 | execute | POST | `/v1/x/execute` | [link](https://developer.japer.io#f8f0f1d2-f8c9-4284-b641-b680ce64cfd4) |
+
