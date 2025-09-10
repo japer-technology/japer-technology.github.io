@@ -5,4 +5,7 @@
 Japer Technology Pty. Ltd.
 An Australian Company
 
+## Developer Resources
+- [developer.japer.io](https://developer.japer.io) - hosts API docs and integration guides
+
 eric.mourant@japer.technology
