@@ -6,5 +6,11 @@
 - [https://developer.japer.io](https://developer.japer.io) - hosts API docs and integration guides
 - [API Endpoints](docs/ENDPOINTS.md) - table of endpoints
 
+### Installation
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Contact
 - eric.mourant@japer.technology
