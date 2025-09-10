@@ -20,6 +20,7 @@ OUTPUT_PATH = Path(__file__).resolve().parents[1] / "docs" / "japer_api_collecti
 
 
 def main() -> int:
+    print(f"requests version: {requests.__version__}")
     try:
         response = requests.get(URL, timeout=10)
         response.raise_for_status()
