@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from urllib.parse import urlparse
+import sys
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COLLECTION_PATH = REPO_ROOT / "docs" / "japer_api_collection.json"
@@ -36,6 +37,27 @@ def traverse(items, lineage):
             yield from traverse(item["item"], lineage + [name])
 
 
+def get_raw_url(req: dict, item_name: str) -> str | None:
+    """Return the raw URL from a Postman request object.
+
+    Handles both string and dict formats for the ``url`` field. If the field
+    is a dict, the ``raw`` value is extracted. When no usable URL is found a
+    warning is emitted and ``None`` is returned.
+    """
+
+    url_field = req.get("url")
+    if isinstance(url_field, dict):
+        raw = url_field.get("raw")
+        if raw:
+            return raw
+        print(f"Warning: '{item_name}' missing raw URL; skipping", file=sys.stderr)
+        return None
+    if isinstance(url_field, str):
+        return url_field
+    print(f"Warning: '{item_name}' missing URL; skipping", file=sys.stderr)
+    return None
+
+
 def main() -> int:
     with COLLECTION_PATH.open("r", encoding="utf-8") as f:
         data = json.load(f)
@@ -50,11 +72,13 @@ def main() -> int:
         if not category:
             continue
         req = item["request"]
+        name = item.get("name", "")
         method = req.get("method", "")
-        raw_url = req.get("url", "")
+        raw_url = get_raw_url(req, name)
+        if not raw_url:
+            continue
         parsed = urlparse(raw_url)
         path_str = parsed.path
-        name = item.get("name", "")
         postman_id = item.get("_postman_id", "")
         link = f"https://developer.japer.io#{postman_id}" if postman_id else ""
         endpoints[category].append((name, method, path_str, link))
