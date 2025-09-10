@@ -1,0 +1,28 @@
+name: Update API docs
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: sudo apt-get update && sudo apt-get install -y python3-requests
+      - run: bash scripts/update_docs.sh
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add docs/ENDPOINTS.md docs/japer_api_collection.json docs/UPDATE_LOG.md
+            git commit -m 'chore: update API docs'
+            git push
+          fi
