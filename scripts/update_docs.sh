@@ -4,8 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$SCRIPT_DIR/.."
 
-python3 "$SCRIPT_DIR/fetch_api_docs.py"
-python3 "$SCRIPT_DIR/generate_endpoints_md.py"
+python "$SCRIPT_DIR/fetch_api_docs.py"
+python "$SCRIPT_DIR/generate_endpoints_md.py"
 
 LOG_FILE="$REPO_ROOT/docs/UPDATE_LOG.md"
 mkdir -p "$(dirname "$LOG_FILE")"
