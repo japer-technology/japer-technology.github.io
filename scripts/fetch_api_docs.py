@@ -18,6 +18,39 @@ import requests
 URL = "https://developer.japer.io/api/collections/5724568/S1Zw8qoK?segregateAuth=true&versionTag=latest"
 OUTPUT_PATH = Path(__file__).resolve().parents[1] / "docs" / "japer_api_collection.json"
 
+# Expected top-level categories in the Postman collection.
+EXPECTED_CATEGORIES: set[str] = {
+    "Ping",
+    "Devices",
+    "Encryptions",
+    "Decryptions",
+    "Validations",
+}
+
+
+def validate_categories(data: dict, expected: set[str] = EXPECTED_CATEGORIES) -> None:
+    """Ensure all expected categories are present in the collection.
+
+    Parameters
+    ----------
+    data:
+        Parsed JSON of the Postman collection.
+    expected:
+        Names of categories expected at the top level of the collection.
+
+    Raises
+    ------
+    ValueError
+        If any expected categories are missing.
+    """
+
+    available = {item.get("name") for item in data.get("item", [])}
+    missing = sorted(expected - available)
+    if missing:
+        raise ValueError(
+            "Missing categories in API collection: " + ", ".join(missing)
+        )
+
 
 def main() -> int:
     print(f"requests version: {requests.__version__}")
@@ -32,6 +65,12 @@ def main() -> int:
         data = response.json()
     except ValueError as exc:
         print(f"Failed to parse JSON: {exc}", file=sys.stderr)
+        return 1
+
+    try:
+        validate_categories(data)
+    except ValueError as exc:
+        print(exc, file=sys.stderr)
         return 1
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
