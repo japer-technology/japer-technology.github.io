@@ -1,4 +1,26 @@
 #!/usr/bin/env python3
+# MIT License
+# 
+# Copyright (c) 2025 Japer Technology Pty. Ltd.
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 """Generate Markdown table of API endpoints from Postman collection."""
 from __future__ import annotations
 
@@ -7,6 +29,17 @@ import re
 from pathlib import Path
 from urllib.parse import urlparse
 import sys
+
+
+def load_collection(path: Path) -> dict:
+    """Load JSON file ignoring leading comment block."""
+    content = path.read_text(encoding="utf-8")
+    if content.lstrip().startswith("/*"):
+        end = content.find("*/")
+        if end != -1:
+            content = content[end + 2:]
+    return json.loads(content)
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COLLECTION_PATH = REPO_ROOT / "docs" / "japer_api_collection.json"
@@ -66,9 +99,7 @@ def slugify(text: str) -> str:
 
 
 def main() -> int:
-    with COLLECTION_PATH.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-
+    data = load_collection(COLLECTION_PATH)
     endpoints: dict[str, list[tuple[str, str, str, str]]] = {v: [] for v in CATEGORY_MAP.values()}
 
     for path, item in traverse(data.get("item", []), []):
