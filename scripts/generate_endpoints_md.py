@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from urllib.parse import urlparse
 import sys
@@ -58,6 +59,12 @@ def get_raw_url(req: dict, item_name: str) -> str | None:
     return None
 
 
+def slugify(text: str) -> str:
+    """Return a lowercase, hyphenated anchor name."""
+
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
 def main() -> int:
     with COLLECTION_PATH.open("r", encoding="utf-8") as f:
         data = json.load(f)
@@ -89,11 +96,15 @@ def main() -> int:
             rows = endpoints.get(category)
             if not rows:
                 continue
-            f.write(f"## {category}\n\n")
+            cat_anchor = slugify(category)
+            f.write(f"## <a name=\"{cat_anchor}\"></a>{category}\n\n")
             f.write("| Endpoint | Method | Path | Docs |\n")
             f.write("| --- | --- | --- | --- |\n")
             for name, method, path_str, link in rows:
-                f.write(f"| {name} | {method} | `{path_str}` | [link]({link}) |\n")
+                ep_anchor = slugify(name)
+                f.write(
+                    f"| <a name=\"{ep_anchor}\"></a>{name} | {method} | `{path_str}` | [link]({link}) |\n"
+                )
             f.write("\n")
     return 0
 
