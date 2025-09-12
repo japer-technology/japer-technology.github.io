@@ -1,66 +1,43 @@
-<!--
-MIT License
-
-Copyright (c) 2025 Japer Technology Pty. Ltd.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
--->
 # API Endpoints
 
-## [Service Status](https://developer.japer.io#1abe80ed-43ef-41b0-8582-ca35ef841fde)
+## <a name="service-status"></a>Service Status
 
 | Endpoint | Method | Path | Docs |
 | --- | --- | --- | --- |
-| ping (AWS API Gateway) | GET | `/ping` | [link](https://developer.japer.io#9f421994-c448-4664-a58a-4199751e9eee) |
-| ping (AWS Lambda) | GET | `/v1/ping` | [link](https://developer.japer.io#13bc6fb4-082e-43a1-8851-44b5328491fd) |
-| ping (JAPER Nexus) | GET | `/v1/x/nexus/status` | [link](https://developer.japer.io#13312f90-f840-45ac-941b-a9d399b424c5) |
+| <a name="ping-aws-api-gateway"></a>ping (AWS API Gateway) | GET | `/ping` | [link](https://developer.japer.io#9f421994-c448-4664-a58a-4199751e9eee) |
+| <a name="ping-aws-lambda"></a>ping (AWS Lambda) | GET | `/v1/ping` | [link](https://developer.japer.io#13bc6fb4-082e-43a1-8851-44b5328491fd) |
+| <a name="ping-japer-nexus"></a>ping (JAPER Nexus) | GET | `/v1/x/nexus/status` | [link](https://developer.japer.io#13312f90-f840-45ac-941b-a9d399b424c5) |
 
-## [Device Management](https://developer.japer.io#b37162b8-3335-4aa3-b88d-96b8beeff729)
-
-| Endpoint | Method | Path | Docs |
-| --- | --- | --- | --- |
-| device/create | PUT | `/v1/x/device/create` | [link](https://developer.japer.io#602b2071-0c16-4884-841a-54b170f10934) |
-| device/status | GET | `/v1/x/device/status` | [link](https://developer.japer.io#ff2a70b3-25a4-45a0-8b48-d7db6aa762af) |
-| device/purge | DELETE | `/v1/x/device/purge` | [link](https://developer.japer.io#0284f306-b48f-4c4f-b22d-a501cb8294bf) |
-| device/kill | DELETE | `/v1/x/device/kill` | [link](https://developer.japer.io#3b1eebef-ba40-4236-986d-b22f8f8ee804) |
-
-## [Customer Validation](https://developer.japer.io#25c88192-276f-4e2c-bc79-489a391f6e58)
+## <a name="device-management"></a>Device Management
 
 | Endpoint | Method | Path | Docs |
 | --- | --- | --- | --- |
-| validation/attempt | PUT | `/v1/x/validate/attempt` | [link](https://developer.japer.io#1bd10f4b-10bc-4471-a2bb-a59fcbe2d657) |
-| validate/domain | PUT | `/v1/x/validate/domain` | [link](https://developer.japer.io#32170320-6356-4b8b-aee2-3f8710f1f23e) |
-| validate/email | GET | `/v1/x/validate/device/email` | [link](https://developer.japer.io#0deccebe-ff46-4113-8101-50842780f3ee) |
-| validate/sms | GET | `/v1/x/validate/device/sms` | [link](https://developer.japer.io#16fa7e5f-251d-43c3-ae3e-ab5a80a6aadd) |
-| validation/status | GET | `/v1/x/validation/status` | [link](https://developer.japer.io#8fed7e8d-5fbd-4613-ae97-246df653c115) |
+| <a name="device-create"></a>device/create | PUT | `/v1/x/device/create` | [link](https://developer.japer.io#602b2071-0c16-4884-841a-54b170f10934) |
+| <a name="device-status"></a>device/status | GET | `/v1/x/device/status` | [link](https://developer.japer.io#ff2a70b3-25a4-45a0-8b48-d7db6aa762af) |
+| <a name="device-purge"></a>device/purge | DELETE | `/v1/x/device/purge` | [link](https://developer.japer.io#0284f306-b48f-4c4f-b22d-a501cb8294bf) |
+| <a name="device-kill"></a>device/kill | DELETE | `/v1/x/device/kill` | [link](https://developer.japer.io#3b1eebef-ba40-4236-986d-b22f8f8ee804) |
 
-## [Data Encryption](https://developer.japer.io#d24e3a9e-d43e-426f-bce7-1b84a71ab5ac)
-
-| Endpoint | Method | Path | Docs |
-| --- | --- | --- | --- |
-| encrypt | POST | `/v1/x/encrypt` | [link](https://developer.japer.io#bd5a0746-7e44-444b-bafc-e092762fb577) |
-
-## [Data Decryption](https://developer.japer.io#f682cbc2-3e69-4586-b759-a61d3b5e5cbe)
+## <a name="customer-validation"></a>Customer Validation
 
 | Endpoint | Method | Path | Docs |
 | --- | --- | --- | --- |
-| decrypt | POST | `/v1/x/decrypt` | [link](https://developer.japer.io#218739dc-adcf-4111-98bf-a6b850a90e4b) |
-| lookup | POST | `/v1/x/lookup` | [link](https://developer.japer.io#e38e344b-ca93-41a9-992c-5647dcb78fbd) |
-| execute | POST | `/v1/x/execute` | [link](https://developer.japer.io#f8f0f1d2-f8c9-4284-b641-b680ce64cfd4) |
+| <a name="validation-attempt"></a>validation/attempt | PUT | `/v1/x/validate/attempt` | [link](https://developer.japer.io#1bd10f4b-10bc-4471-a2bb-a59fcbe2d657) |
+| <a name="validate-domain"></a>validate/domain | PUT | `/v1/x/validate/domain` | [link](https://developer.japer.io#32170320-6356-4b8b-aee2-3f8710f1f23e) |
+| <a name="validate-email"></a>validate/email | GET | `/v1/x/validate/device/email` | [link](https://developer.japer.io#0deccebe-ff46-4113-8101-50842780f3ee) |
+| <a name="validate-sms"></a>validate/sms | GET | `/v1/x/validate/device/sms` | [link](https://developer.japer.io#16fa7e5f-251d-43c3-ae3e-ab5a80a6aadd) |
+| <a name="validation-status"></a>validation/status | GET | `/v1/x/validation/status` | [link](https://developer.japer.io#8fed7e8d-5fbd-4613-ae97-246df653c115) |
+
+## <a name="data-encryption"></a>Data Encryption
+
+| Endpoint | Method | Path | Docs |
+| --- | --- | --- | --- |
+| <a name="encrypt"></a>encrypt | POST | `/v1/x/encrypt` | [link](https://developer.japer.io#bd5a0746-7e44-444b-bafc-e092762fb577) |
+
+## <a name="data-decryption"></a>Data Decryption
+
+| Endpoint | Method | Path | Docs |
+| --- | --- | --- | --- |
+| <a name="decrypt"></a>decrypt | POST | `/v1/x/decrypt` | [link](https://developer.japer.io#218739dc-adcf-4111-98bf-a6b850a90e4b) |
+| <a name="lookup"></a>lookup | POST | `/v1/x/lookup` | [link](https://developer.japer.io#e38e344b-ca93-41a9-992c-5647dcb78fbd) |
+| <a name="execute"></a>execute | POST | `/v1/x/execute` | [link](https://developer.japer.io#f8f0f1d2-f8c9-4284-b641-b680ce64cfd4) |
 
