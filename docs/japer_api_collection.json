@@ -2269,6 +2269,7 @@ SOFTWARE.
                       "raw": ""
                     },
                     "url": "https://api.japer.io/v1/x/nexus/status",
+                    "description": "<p>GET</p>\n",
                     "urlObject": {
                       "path": [
                         "nexus",
@@ -2403,6 +2404,7 @@ SOFTWARE.
                       "raw": ""
                     },
                     "url": "https://api.japer.io/v1/x/nexus/status",
+                    "description": "<p>PUT</p>\n",
                     "urlObject": {
                       "path": [
                         "nexus",
@@ -2537,6 +2539,7 @@ SOFTWARE.
                       "raw": ""
                     },
                     "url": "https://api.japer.io/v1/x/nexus/status",
+                    "description": "<p>POST</p>\n",
                     "urlObject": {
                       "path": [
                         "nexus",
@@ -2671,6 +2674,7 @@ SOFTWARE.
                       "raw": ""
                     },
                     "url": "https://api.japer.io/v1/x/nexus/status",
+                    "description": "<p>PATCH</p>\n",
                     "urlObject": {
                       "path": [
                         "nexus",
@@ -2805,6 +2809,7 @@ SOFTWARE.
                       "raw": ""
                     },
                     "url": "https://api.japer.io/v1/x/nexus/status",
+                    "description": "<p>DEL</p>\n",
                     "urlObject": {
                       "path": [
                         "nexus",
@@ -3061,8 +3066,8 @@ SOFTWARE.
               "name": "Pagination, Filtering and Sorting",
               "item": [],
               "id": "bfb073c1-dcf0-4d14-a6e7-9035e284e0f8",
+              "description": "<p>Not required.</p>\n",
               "_postman_id": "bfb073c1-dcf0-4d14-a6e7-9035e284e0f8",
-              "description": "",
               "auth": {
                 "type": "noauth",
                 "isInherited": true,
@@ -4333,8 +4338,8 @@ SOFTWARE.
             }
           ],
           "id": "cb18af0f-0438-4a1c-b4c4-3ed5a12bd8d4",
+          "description": "<p>This needs to expanded.</p>\n",
           "_postman_id": "cb18af0f-0438-4a1c-b4c4-3ed5a12bd8d4",
-          "description": "",
           "auth": {
             "type": "noauth",
             "isInherited": true,
