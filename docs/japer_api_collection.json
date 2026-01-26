@@ -757,6 +757,8 @@ SOFTWARE.
                 },
                 "url": "https://api.japer.io/v1/x/device/create"
               },
+              "status": "Created",
+              "code": 201,
               "_postman_previewlanguage": "text",
               "header": [],
               "cookie": [],
@@ -841,7 +843,7 @@ SOFTWARE.
           "response": [
             {
               "id": "d0837226-fbcc-4212-98b3-916234084661",
-              "name": "device/status",
+              "name": "device/status Known",
               "originalRequest": {
                 "method": "GET",
                 "header": [
@@ -862,8 +864,8 @@ SOFTWARE.
                 },
                 "url": "https://api.japer.io/v1/x/device/status"
               },
-              "status": "Created",
-              "code": 201,
+              "status": "OK",
+              "code": 200,
               "_postman_previewlanguage": "json",
               "header": [
                 {
@@ -914,6 +916,82 @@ SOFTWARE.
               "cookie": [],
               "responseTime": null,
               "body": "{\n    \"outcome\": {\n        \"type\": \"DEVICE\",\n        \"device\": \"good\",\n        \"domain_window\": 365,\n        \"show_activity\": 5,\n        \"rest_after\": 60,\n        \"barcode_on_rest\": \"JAPER-APP-REST\",\n        \"ping_cycles\": 5,\n        \"ping_lowest\": 3,\n        \"japer_purple\": \"#AC43D9\",\n        \"japer_black\": \"#000000\",\n        \"japer_white\": \"#FFFFFF\",\n        \"japer_red\": \"#FF1D65\",\n        \"japer_green\": \"#70D943\",\n        \"japer_blue\": \"#1D7FFF\",\n        \"validations\": [],\n        \"api_entry\": 1,\n        \"api_entrypoint\": {\n            \"entrypoints\": [\n                {\n                    \"id\": 1,\n                    \"online\": 1,\n                    \"key\": \"JSY\",\n                    \"name\": \"JAPER Australia (Systems)\",\n                    \"host\": \"api.japer.systems\"\n                },\n                {\n                    \"id\": 2,\n                    \"online\": 1,\n                    \"key\": \"JEPAPSE2\",\n                    \"name\": \"JAPER Australia\",\n                    \"host\": \"api.japer-ap-southeast-2.net\"\n                },\n                {\n                    \"id\": 6,\n                    \"online\": 1,\n                    \"key\": \"JEPEUC1\",\n                    \"name\": \"JAPER Germany\",\n                    \"host\": \"api.japer-eu-central-1.net\"\n                },\n                {\n                    \"id\": 12,\n                    \"online\": 1,\n                    \"key\": \"JEPAPNE1\",\n                    \"name\": \"JAPER Japan (Tokyo)\",\n                    \"host\": \"api.japer-ap-northeast-1.net\"\n                },\n                {\n                    \"id\": 13,\n                    \"online\": 1,\n                    \"key\": \"JEPAPSE1\",\n                    \"name\": \"JAPER Singapore\",\n                    \"host\": \"api.japer-ap-southeast-1.net\"\n                },\n                {\n                    \"id\": 17,\n                    \"online\": 1,\n                    \"key\": \"JEPUEW2\",\n                    \"name\": \"JAPER United Kingdom\",\n                    \"host\": \"api.japer-eu-west-2.net\"\n                },\n                {\n                    \"id\": 19,\n                    \"online\": 1,\n                    \"key\": \"JEPUSE1\",\n                    \"name\": \"JAPER USA (North Virginia)\",\n                    \"host\": \"api.japer-us-east-1.net\"\n                },\n                {\n                    \"id\": 21,\n                    \"online\": 1,\n                    \"key\": \"JEPUSW2\",\n                    \"name\": \"JAPER USA (Oregon)\",\n                    \"host\": \"api.japer-us-west-2.net\"\n                }\n            ]\n        },\n        \"api_pre\": \"https://\",\n        \"api_ping\": \"/ping\",\n        \"api_device_create\": \"/v1/x/device/create\",\n        \"api_device_status\": \"/v1/x/device/status\",\n        \"api_device_purge\": \"/v1/x/device/purge\",\n        \"api_device_kill\": \"/v1/x/device/kill\",\n        \"api_lookup\": \"/v1/x/lookup\",\n        \"api_validation_attempt\": \"/v1/x/validation/attempt\",\n        \"api_validation_domain\": \"/v1/x/validation/domain\",\n        \"api_validation_email\": \"/v1/x/validation/email\",\n        \"api_validation_sms\": \"/v1/x/validation/sms\"\n    }\n}"
+            },
+            {
+              "id": "233c01b8-4101-4c0d-b202-2cb7372a5ed2",
+              "name": "device/status Unknown",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/device/status"
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "2224"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 27 Nov 2024 07:08:15 GMT"
+                },
+                {
+                  "key": "X-Amzn-Trace-Id",
+                  "value": "Root=1-6746c55e-13be76ed06610bfb212d05d8;Parent=5c64737d542eaa67;Sampled=0;Lineage=1:01f7463b:0"
+                },
+                {
+                  "key": "x-amzn-RequestId",
+                  "value": "9910b2ce-146c-4530-ba58-f42be99d568b"
+                },
+                {
+                  "key": "x-amz-apigw-id",
+                  "value": "B5PG2ETHSwMEj_g="
+                },
+                {
+                  "key": "X-Cache",
+                  "value": "Miss from cloudfront"
+                },
+                {
+                  "key": "Via",
+                  "value": "1.1 0cac85989fc39dec91b3deb3364e4378.cloudfront.net (CloudFront)"
+                },
+                {
+                  "key": "X-Amz-Cf-Pop",
+                  "value": "MEL51-P1"
+                },
+                {
+                  "key": "X-Amz-Cf-Id",
+                  "value": "n7eVLITsse_dbV_ckCV_cDTCRFlveYqBAa4CFHwq-bSYSvBQn0hmmA=="
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "Unknown"
             }
           ],
           "_postman_id": "ff2a70b3-25a4-45a0-8b48-d7db6aa762af"
@@ -990,7 +1068,45 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "5fdf0f2a-a4fc-4ee2-bc7c-dd114ed26bcb",
+              "name": "device/purge",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/device/purge"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "responseTime": null,
+              "body": ""
+            }
+          ],
           "_postman_id": "0284f306-b48f-4c4f-b22d-a501cb8294bf"
         },
         {
@@ -1065,7 +1181,39 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "417e8ace-706a-44e3-aeac-537a3ef08306",
+              "name": "device/kill",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/device/kill"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ],
           "_postman_id": "3b1eebef-ba40-4236-986d-b22f8f8ee804"
         }
       ],
@@ -1212,7 +1360,57 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "86f56a29-b404-42b0-ae68-10d7e36b125b",
+              "name": "encrypt",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-cid",
+                    "value": "{{JAPER Customer ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-target",
+                    "value": "{{JAPER Customers}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "{{JAPER Command}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "https://api.japer.io/v1/x/encrypt"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "bd5a0746-7e44-444b-bafc-e092762fb577"
         }
       ],
@@ -1323,7 +1521,42 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "a8402f45-d8de-4e39-9b31-e8baf5956f6b",
+              "name": "decrypt",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "{{JAPER Command}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/decrypt"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "218739dc-adcf-4111-98bf-a6b850a90e4b"
         },
         {
@@ -1400,7 +1633,42 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "185c6d1d-8559-47fb-8406-5fbfbf9dee5d",
+              "name": "lookup",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "{{JAPER Command}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/lookup"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "e38e344b-ca93-41a9-992c-5647dcb78fbd"
         },
         {
@@ -1474,7 +1742,39 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "34ef40e2-7421-45af-a3c8-a9ba5606b435",
+              "name": "execute",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "{{JAPER Command}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/execute"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "f8f0f1d2-f8c9-4284-b641-b680ce64cfd4"
         }
       ],
@@ -1588,7 +1888,80 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "b3be1e94-dcc7-4e33-b9c7-aedd14b6243b",
+              "name": "Accepted",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-gocode",
+                    "value": "{{JAPER Validation Code}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/attempt"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            },
+            {
+              "id": "8af37812-4b06-413f-a35f-39b56a41f11d",
+              "name": "Not Validated",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-gocode",
+                    "value": "{{JAPER Validation Code}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/attempt"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "1bd10f4b-10bc-4471-a2bb-a59fcbe2d657"
         },
         {
@@ -1674,7 +2047,48 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "ed86cfc6-dafa-481c-aca8-5737a69de7da",
+              "name": "TXT Found",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-vid",
+                    "value": "{{JAPER Validation ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-customer",
+                    "value": "{{Domain}}",
+                    "description": "Mandatory: RFC 1035, Section 2.3.1 defines domain names as alphanumeric labels, 63 characters max, separated by dots, case-insensitive.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/domain"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "32170320-6356-4b8b-aee2-3f8710f1f23e"
         },
         {
@@ -1756,7 +2170,45 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "5c3f7c10-0281-474f-bf65-dfff6418da26",
+              "name": "Email Sent",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-customer",
+                    "value": "{{Email Address}}",
+                    "description": "Mandatory: RFC 5322, Section 3.4.1 defines email address syntax as local-part@domain, with strict rules for valid characters and structure.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/device/email"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "0deccebe-ff46-4113-8101-50842780f3ee"
         },
         {
@@ -1838,7 +2290,80 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "eb4606c5-2875-4891-9e47-80edcc2d4813",
+              "name": "SMS Sent",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-customer",
+                    "value": "{{Telephone Number}}",
+                    "description": "E.164 format: +[Country Code][Subscriber Number], max 15 digits.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/device/sms"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            },
+            {
+              "id": "f7cd8f61-12ad-4310-a91d-f2ec373ebb7b",
+              "name": "SMS Not Sent",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-customer",
+                    "value": "{{Telephone Number}}",
+                    "description": "E.164 format: +[Country Code][Subscriber Number], max 15 digits.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validate/device/sms"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "16fa7e5f-251d-43c3-ae3e-ab5a80a6aadd"
         },
         {
@@ -1918,7 +2443,42 @@ SOFTWARE.
               "variable": []
             }
           },
-          "response": [],
+          "response": [
+            {
+              "id": "f24c835f-1d72-4fe9-b4f2-eb12a478881a",
+              "name": "validation/status",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-customer",
+                    "value": "{{JAPER Customer}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://api.japer.io/v1/x/validation/status"
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "responseTime": null,
+              "body": null
+            }
+          ],
           "_postman_id": "8fed7e8d-5fbd-4613-ae97-246df653c115"
         }
       ],
@@ -4029,7 +4589,39 @@ SOFTWARE.
                       "variable": []
                     }
                   },
-                  "response": [],
+                  "response": [
+                    {
+                      "id": "c57aa659-76ff-4a61-aaf0-89348e13a8a7",
+                      "name": "JAPER-NAMESPACE",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "japer-aid",
+                            "value": "{{JAPER Application ID}}"
+                          },
+                          {
+                            "key": "japer-did",
+                            "value": "{{JAPER Device ID}}"
+                          },
+                          {
+                            "key": "japer-data",
+                            "value": "JAPER-NAMESPACE"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": ""
+                        },
+                        "url": "https://api.japer.io/v1/x/execute"
+                      },
+                      "_postman_previewlanguage": null,
+                      "header": null,
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null
+                    }
+                  ],
                   "_postman_id": "8c6b49a1-fd8d-4f56-b5dc-95b5b88687cf"
                 },
                 {
@@ -4103,7 +4695,39 @@ SOFTWARE.
                       "variable": []
                     }
                   },
-                  "response": [],
+                  "response": [
+                    {
+                      "id": "7d889735-7fc1-49fa-a8ca-fb7cc804b443",
+                      "name": "JAPER-COMMAND",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "japer-aid",
+                            "value": "{{JAPER Application ID}}"
+                          },
+                          {
+                            "key": "japer-did",
+                            "value": "{{JAPER Device ID}}"
+                          },
+                          {
+                            "key": "japer-data",
+                            "value": "JAPER-COMMAND"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"japer\": {\r\n        \"command\"   : \"JAPER-WHO-AM-I\",\r\n    }\r\n}"
+                        },
+                        "url": "https://api.japer.io/v1/x/execute"
+                      },
+                      "_postman_previewlanguage": null,
+                      "header": null,
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null
+                    }
+                  ],
                   "_postman_id": "0414c926-f58e-41cb-b30e-5ba3c05f1f27"
                 },
                 {
@@ -4177,7 +4801,39 @@ SOFTWARE.
                       "variable": []
                     }
                   },
-                  "response": [],
+                  "response": [
+                    {
+                      "id": "776ea37c-b8da-4127-8b0f-29dbe2da0d01",
+                      "name": "JAPER-ISO-TIME",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "japer-aid",
+                            "value": "{{JAPER Application ID}}"
+                          },
+                          {
+                            "key": "japer-did",
+                            "value": "{{JAPER Device ID}}"
+                          },
+                          {
+                            "key": "japer-data",
+                            "value": "JAPER-OSI-TIME"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": ""
+                        },
+                        "url": "https://api.japer.io/v1/x/execute"
+                      },
+                      "_postman_previewlanguage": null,
+                      "header": null,
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null
+                    }
+                  ],
                   "_postman_id": "78541105-fe85-4779-9614-9c43be1e466e"
                 },
                 {
@@ -4251,7 +4907,39 @@ SOFTWARE.
                       "variable": []
                     }
                   },
-                  "response": [],
+                  "response": [
+                    {
+                      "id": "bc7469d4-06a8-4c6b-89c3-ae43fd211d40",
+                      "name": "JAPER-NEXUS-STATUS",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "japer-aid",
+                            "value": "{{JAPER Application ID}}"
+                          },
+                          {
+                            "key": "japer-did",
+                            "value": "{{JAPER Device ID}}"
+                          },
+                          {
+                            "key": "japer-data",
+                            "value": "JAPER-NEXUS-STATUS"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": ""
+                        },
+                        "url": "https://api.japer.io/v1/x/execute"
+                      },
+                      "_postman_previewlanguage": null,
+                      "header": null,
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null
+                    }
+                  ],
                   "_postman_id": "818c8117-c281-4373-b9b3-28b7c3d130d2"
                 }
               ],
