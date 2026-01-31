@@ -1248,203 +1248,6 @@ SOFTWARE.
       "_postman_id": "b37162b8-3335-4aa3-b88d-96b8beeff729"
     },
     {
-      "name": "Encryptions",
-      "item": [
-        {
-          "name": "encrypt",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "c86c1860-5ad3-4c79-9efd-d3740d767106",
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "id": "d853ea88-9b1d-4196-8f7a-f50613e86071",
-                "exec": [
-                  "const body = {\r",
-                  "    \"outcome\":{\r",
-                  "        \"cache\":3600,\r",
-                  "        \"type\":\"JAPER\",\r",
-                  "        \"lookup\":\"ERIC\",\r",
-                  "        \"data\":[\r",
-                  "            {\"draw\":\"ar\",\"order\":1,\"size\":-4,\"type\":\"text\",\"value\":\"Eric Mourant\",\"justify\":\"middle\"},\r",
-                  "            {\"draw\":\"full\",\"order\":2,\"size\":0,\"type\":\"text\",\"value\":\"Eric Mourant\",\"justify\":\"middle\"},\r",
-                  "            {\"draw\":\"full\",\"order\":3,\"type\":\"text\",\"size\":-12,\"value\":\" \",\"justify\":\"middle\"},\r",
-                  "            {\"draw\":\"full\",\"order\":4,\"type\":\"text\",\"size\":-6,\"value\":\"CEO and Co-Founder\",\"justify\":\"middle\"},\r",
-                  "            {\"draw\":\"full\",\"order\":5,\"type\":\"text\",\"size\":-8,\"value\":\"Japer Technology Pty. Ltd.\",\"justify\":\"middle\"}\r",
-                  "            {\"draw\":\"full\",\"order\":5,\"type\":\"text\",\"size\":-8,\"value\":\"+61 0 412 646 711 \",\"justify\":\"middle\"}\r",
-                  "        ]\r",
-                  "    }\r",
-                  "};\r",
-                  "\r",
-                  "pm.globals.set(\"body\", JSON.stringify(body));"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "id": "bd5a0746-7e44-444b-bafc-e092762fb577",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "auth": {
-              "type": "apikey",
-              "apikey": {
-                "basicConfig": [
-                  {
-                    "key": "key",
-                    "value": "x-api-key"
-                  },
-                  {
-                    "key": "value",
-                    "value": "{{JAPER API Key}}"
-                  }
-                ]
-              },
-              "isInherited": false
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "japer-aid",
-                "value": "{{JAPER Application ID}}",
-                "type": "text"
-              },
-              {
-                "key": "japer-cid",
-                "value": "{{JAPER Customer ID}}",
-                "type": "text"
-              },
-              {
-                "key": "japer-did",
-                "value": "{{JAPER Device ID}}",
-                "type": "text"
-              },
-              {
-                "key": "japer-target",
-                "value": "{{JAPER Customers}}",
-                "type": "text"
-              },
-              {
-                "key": "japer-data",
-                "value": "{{JAPER Command}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": "https://api.japer.io/v1/x/encrypt",
-            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Encrypts outcome between customers.</p>\n</blockquote>\n",
-            "urlObject": {
-              "host": [
-                "https://api.japer.io/v1/x/encrypt"
-              ],
-              "query": [],
-              "variable": []
-            }
-          },
-          "response": [
-            {
-              "id": "86f56a29-b404-42b0-ae68-10d7e36b125b",
-              "name": "encrypt",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "japer-aid",
-                    "value": "{{JAPER Application ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-cid",
-                    "value": "{{JAPER Customer ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-did",
-                    "value": "{{JAPER Device ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-target",
-                    "value": "{{JAPER Customers}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-data",
-                    "value": "{{JAPER Command}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": "https://api.japer.io/v1/x/encrypt"
-              },
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "responseTime": null,
-              "body": null
-            }
-          ],
-          "_postman_id": "bd5a0746-7e44-444b-bafc-e092762fb577"
-        }
-      ],
-      "id": "d24e3a9e-d43e-426f-bce7-1b84a71ab5ac",
-      "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/Japer-300x256.gif\" width=\"150\" height=\"128\" /></a></p>\n<p>This JAPER Outcome JSON Schema, <a href=\"https://www.japer.tools/json-schema/outcome.json\">https://www.japer.tools/json-schema/outcome.json</a>, is strictly enforced during JAPER Encryption.</p>\n<p>This core business function of JAPER provides allows JAPER Outcome at the intersection of a barcode, a business domain and a business customer email address, mobile telephone or internet domain.</p>\n<p>An encryption is processed as the decryption of a encryption command.</p>\n",
-      "auth": {
-        "type": "noauth",
-        "isInherited": false
-      },
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "id": "1103c37a-0940-47cc-9124-b8da9ca7def0",
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "id": "b024f33e-5afe-4c62-8052-b006323a3a1a",
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        }
-      ],
-      "_postman_id": "d24e3a9e-d43e-426f-bce7-1b84a71ab5ac"
-    },
-    {
       "name": "Decryptions",
       "item": [
         {
@@ -1809,6 +1612,322 @@ SOFTWARE.
       "_postman_id": "f682cbc2-3e69-4586-b759-a61d3b5e5cbe"
     },
     {
+      "name": "Encryptions",
+      "item": [
+        {
+          "name": "encrypt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c86c1860-5ad3-4c79-9efd-d3740d767106",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "d853ea88-9b1d-4196-8f7a-f50613e86071",
+                "exec": [
+                  "const body = {\r",
+                  "    \"outcome\":{\r",
+                  "        \"cache\":3600,\r",
+                  "        \"type\":\"JAPER\",\r",
+                  "        \"lookup\":\"ERIC\",\r",
+                  "        \"data\":[\r",
+                  "            {\"draw\":\"ar\",\"order\":1,\"size\":-4,\"type\":\"text\",\"value\":\"Eric Mourant\",\"justify\":\"middle\"},\r",
+                  "            {\"draw\":\"full\",\"order\":2,\"size\":0,\"type\":\"text\",\"value\":\"Eric Mourant\",\"justify\":\"middle\"},\r",
+                  "            {\"draw\":\"full\",\"order\":3,\"type\":\"text\",\"size\":-12,\"value\":\" \",\"justify\":\"middle\"},\r",
+                  "            {\"draw\":\"full\",\"order\":4,\"type\":\"text\",\"size\":-6,\"value\":\"CEO and Co-Founder\",\"justify\":\"middle\"},\r",
+                  "            {\"draw\":\"full\",\"order\":5,\"type\":\"text\",\"size\":-8,\"value\":\"Japer Technology Pty. Ltd.\",\"justify\":\"middle\"}\r",
+                  "            {\"draw\":\"full\",\"order\":5,\"type\":\"text\",\"size\":-8,\"value\":\"+61 0 412 646 711 \",\"justify\":\"middle\"}\r",
+                  "        ]\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "pm.globals.set(\"body\", JSON.stringify(body));"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "id": "bd5a0746-7e44-444b-bafc-e092762fb577",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": {
+                "basicConfig": [
+                  {
+                    "key": "key",
+                    "value": "x-api-key"
+                  },
+                  {
+                    "key": "value",
+                    "value": "{{JAPER API Key}}"
+                  }
+                ]
+              },
+              "isInherited": false
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "japer-aid",
+                "value": "{{JAPER Application ID}}",
+                "type": "text"
+              },
+              {
+                "key": "japer-cid",
+                "value": "{{JAPER Customer ID}}",
+                "type": "text"
+              },
+              {
+                "key": "japer-did",
+                "value": "{{JAPER Device ID}}",
+                "type": "text"
+              },
+              {
+                "key": "japer-target",
+                "value": "{{JAPER Customers}}",
+                "type": "text"
+              },
+              {
+                "key": "japer-data",
+                "value": "{{JAPER Command}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "https://api.japer.io/v1/x/encrypt",
+            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Encrypts outcome between customers.</p>\n</blockquote>\n",
+            "urlObject": {
+              "host": [
+                "https://api.japer.io/v1/x/encrypt"
+              ],
+              "query": [],
+              "variable": []
+            }
+          },
+          "response": [
+            {
+              "id": "86f56a29-b404-42b0-ae68-10d7e36b125b",
+              "name": "JAPER-DATASPACE",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-cid",
+                    "value": "{{JAPER Customer ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-target",
+                    "value": "eric.mourant@japer.technology",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "JAPER-DATASPACE",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "https://api.japer.io/v1/x/encrypt"
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\r\n    \"outcome\": {\r\n        \"cache\": 600,\r\n        \"type\": \"JAPER\",\r\n        \"full_title_1\": \"Hello\",\r\n        \"full_title_2\": \"Eric\",\r\n        \"full_hide_all_buttons\": \"yes\",\r\n        \"data\": [\r\n            {\r\n                \"draw\": \"all\",\r\n                \"order\": 1,\r\n                \"type\": \"text\",\r\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\" \r\n            }\r\n        ]\r\n    }\r\n}"
+            },
+            {
+              "id": "27d0f4de-7cf7-4774-8ba5-acaa53b98505",
+              "name": "JAPER-KEYSPACE",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-cid",
+                    "value": "{{JAPER Customer ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-target",
+                    "value": "eric.mourant@japer.technology",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "https://api.japer.io/v1/x/encrypt"
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n    {\n    \"japer\": {\n        \"command\": \"\"\n    },\n    \"outcome\": {\n        \"cache\": 600,\n        \"type\": \"JAPER\",\n        \"full_title_1\": \"Hello\",\n        \"full_title_2\": \"Eric\",\n        \"full_hide_all_buttons\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"all\",\n                \"order\": 1,\n                \"type\": \"text\",\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\"\n            }\n        ]\n    }\n}"
+            },
+            {
+              "id": "1d65582e-1e4b-417d-b8f3-1d82a2cbe534",
+              "name": "JAPER-PODSPACE",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "japer-aid",
+                    "value": "{{JAPER Application ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-cid",
+                    "value": "{{JAPER Customer ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-did",
+                    "value": "{{JAPER Device ID}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-target",
+                    "value": "{{JAPER Customers}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "japer-data",
+                    "value": "{{JAPER Command}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "https://api.japer.io/v1/x/encrypt"
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n    \"outcome\": {\n        \"cache\": 600,\n        \"type\": \"JAPER\",\n        \"full_title_1\": \"Hello\",\n        \"full_title_2\": \"Eric\",\n        \"full_hide_all_buttons\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"all\",\n                \"order\": 1,\n                \"type\": \"text\",\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\"\n            }\n        ]\n    }\n}"
+            }
+          ],
+          "_postman_id": "bd5a0746-7e44-444b-bafc-e092762fb577"
+        }
+      ],
+      "id": "d24e3a9e-d43e-426f-bce7-1b84a71ab5ac",
+      "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/Japer-300x256.gif\" width=\"150\" height=\"128\" /></a></p>\n<p>This JAPER Outcome JSON Schema, <a href=\"https://www.japer.tools/json-schema/outcome.json\">https://www.japer.tools/json-schema/outcome.json</a>, is strictly enforced during JAPER Encryption.</p>\n<p>This core business function of JAPER provides allows JAPER Outcome at the intersection of a barcode, a business domain and a business customer email address, mobile telephone or internet domain.</p>\n<p>An encryption is processed as the decryption of a encryption command.</p>\n",
+      "auth": {
+        "type": "noauth",
+        "isInherited": false
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "1103c37a-0940-47cc-9124-b8da9ca7def0",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "b024f33e-5afe-4c62-8052-b006323a3a1a",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "_postman_id": "d24e3a9e-d43e-426f-bce7-1b84a71ab5ac"
+    },
+    {
       "name": "Validations",
       "item": [
         {
@@ -1891,7 +2010,7 @@ SOFTWARE.
           "response": [
             {
               "id": "b3be1e94-dcc7-4e33-b9c7-aedd14b6243b",
-              "name": "Successful",
+              "name": "PIN Accepted",
               "originalRequest": {
                 "method": "PUT",
                 "header": [
@@ -1927,7 +2046,7 @@ SOFTWARE.
             },
             {
               "id": "8af37812-4b06-413f-a35f-39b56a41f11d",
-              "name": "Failed",
+              "name": "PIN Failed",
               "originalRequest": {
                 "method": "PUT",
                 "header": [
