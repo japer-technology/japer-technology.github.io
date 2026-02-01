@@ -1562,7 +1562,7 @@ SOFTWARE.
                   },
                   {
                     "key": "japer-data",
-                    "value": "{{JAPER Command}}"
+                    "value": "JAPER-BARCODE"
                   }
                 ],
                 "body": {
@@ -1571,11 +1571,20 @@ SOFTWARE.
                 },
                 "url": "https://api.japer.io/v1/x/execute"
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
               "cookie": [],
               "responseTime": null,
-              "body": null
+              "body": "{\n    \"outcome\": {\n        \"full_allow_landscape\": \"no\",\n        \"cache\": 60,\n        \"cache_ar\": 60,\n        \"cache_full\": 31536000,\n        \"type\": \"JAPER\",\n        \"lookup\": \"JAPER-BARCODE\",\n        \"auto_full\": \"yes\",\n        \"width_full\": 0.98,\n        \"full_control\": \"yes\",\n        \"full_override_japer\": \"#000000\",\n        \"full_hide_help_button\": \"yes\",\n        \"full_hide_copy_button\": \"yes\",\n        \"full_hide_shot_button\": \"yes\",\n        \"ar_border_north_east\": \"#FFFFFF\",\n        \"ar_cache_off\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"full\",\n                \"order\": 1,\n                \"justify\": \"middle\",\n                \"type\": \"barcode\",\n                \"barcodetype\": \"qr\",\n                \"qr_error_correction\": \"H\",\n                \"barcode_foreground\": \"#FFFFFF\",\n                \"barcode_background\": \"#AC43D9\",\n                \"pad_top\": 16,\n                \"imageheight\": 300,\n                \"value\": \"JAPER-TECHNOLOGY\",\n                \"background\": \"#AC43D9\",\n                \"barcode_url\": \"https://www.japer.technology\",\n                \"pad_bottom\": 16\n            },\n            {\n                \"draw\": \"all\",\n                \"order\": 2,\n                \"justify\": \"middle\",\n                \"type\": \"text\",\n                \"size\": 4,\n                \"value\": \"JAPER-TECHNOLOGY\",\n                \"foreground\": \"#AC43D9\",\n                \"background\": \"#000000\",\n                \"background_title\": \"#000000\"\n            }\n        ]\n    }\n}"
             }
           ],
           "_postman_id": "f8f0f1d2-f8c9-4284-b641-b680ce64cfd4"
@@ -1779,7 +1788,7 @@ SOFTWARE.
               ],
               "cookie": [],
               "responseTime": null,
-              "body": "{\r\n    \"outcome\": {\r\n        \"cache\": 600,\r\n        \"type\": \"JAPER\",\r\n        \"full_title_1\": \"Hello\",\r\n        \"full_title_2\": \"Eric\",\r\n        \"full_hide_all_buttons\": \"yes\",\r\n        \"data\": [\r\n            {\r\n                \"draw\": \"all\",\r\n                \"order\": 1,\r\n                \"type\": \"text\",\r\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\" \r\n            }\r\n        ]\r\n    }\r\n}"
+              "body": "{\r\n    {\r\n    \"japer\": {\r\n        \"command\": \"JAPER-KEYSPACE\",\r\n        \"key\": \"ERIC-MOURANT-XYZ://Example\"\r\n    },\r\n    \"outcome\": {\r\n        \"cache\": 600,\r\n        \"type\": \"JAPER\",\r\n        \"full_title_1\": \"Hello\",\r\n        \"full_title_2\": \"Eric\",\r\n        \"full_hide_all_buttons\": \"yes\",\r\n        \"data\": [\r\n            {\r\n                \"draw\": \"all\",\r\n                \"order\": 1,\r\n                \"type\": \"text\",\r\n                \"value\": \"This Hello resides in JAPER-KEYSPACE, between customers and a key.\"\r\n            }\r\n        ]\r\n    }\r\n}"
             },
             {
               "id": "27d0f4de-7cf7-4774-8ba5-acaa53b98505",
@@ -1835,63 +1844,7 @@ SOFTWARE.
               ],
               "cookie": [],
               "responseTime": null,
-              "body": "{\n    {\n    \"japer\": {\n        \"command\": \"\"\n    },\n    \"outcome\": {\n        \"cache\": 600,\n        \"type\": \"JAPER\",\n        \"full_title_1\": \"Hello\",\n        \"full_title_2\": \"Eric\",\n        \"full_hide_all_buttons\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"all\",\n                \"order\": 1,\n                \"type\": \"text\",\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\"\n            }\n        ]\n    }\n}"
-            },
-            {
-              "id": "1d65582e-1e4b-417d-b8f3-1d82a2cbe534",
-              "name": "JAPER-PODSPACE",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "japer-aid",
-                    "value": "{{JAPER Application ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-cid",
-                    "value": "{{JAPER Customer ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-did",
-                    "value": "{{JAPER Device ID}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-target",
-                    "value": "{{JAPER Customers}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "japer-data",
-                    "value": "{{JAPER Command}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"japer\": {\r\n        \"outcome\" : { \r\n            \"$ref\": \"https://www.japer.tools/json-schema/outcome.json\" \r\n        }\r\n    }\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": "https://api.japer.io/v1/x/encrypt"
-              },
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "responseTime": null,
-              "body": "{\n    \"outcome\": {\n        \"cache\": 600,\n        \"type\": \"JAPER\",\n        \"full_title_1\": \"Hello\",\n        \"full_title_2\": \"Eric\",\n        \"full_hide_all_buttons\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"all\",\n                \"order\": 1,\n                \"type\": \"text\",\n                \"value\": \"This Hello resides in JAPER-DATA, between customers and a key.\"\n            }\n        ]\n    }\n}"
+              "body": "{\n    {\n    \"japer\": {\n        \"command\": \"JAPER-KEYSPACE\",\n        \"key\": \"ERIC-MOURANT-XYZ://Example\"\n    },\n    \"outcome\": {\n        \"cache\": 600,\n        \"type\": \"JAPER\",\n        \"full_title_1\": \"Hello\",\n        \"full_title_2\": \"Eric\",\n        \"full_hide_all_buttons\": \"yes\",\n        \"data\": [\n            {\n                \"draw\": \"all\",\n                \"order\": 1,\n                \"type\": \"text\",\n                \"value\": \"This Hello resides in JAPER-KEYSPACE, between customers and a key.\"\n            }\n        ]\n    }\n}"
             }
           ],
           "_postman_id": "bd5a0746-7e44-444b-bafc-e092762fb577"
@@ -2278,7 +2231,7 @@ SOFTWARE.
               "raw": ""
             },
             "url": "https://api.japer.io/v1/x/validate/device/email",
-            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Creates a pending validation for the device and an email is sent containing the PIN. </p>\n</blockquote>\n<h5 id=\"status-code\">STATUS CODE</h5>\n<p><code>201</code> = Email sent and Validation created.</p>\n<h5 id=\"returns-text\">RETURNS TEXT</h5>\n<p>email</p>\n<h5 id=\"japer-app-equivalent\">JAPER APP EQUIVALENT</h5>\n<p><a href=\"https://www.japer.vision/?j=JAPER-APP+goto:validate-email\"><img src=\"https://i.imgur.com/dmwQjk3.png\" alt=\"JAPER-APP+goto:validate-email\" width=\"200\" height=\"200\" /></a></p>\n",
+            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Issues a one-time PIN challenge for device\u2013email binding and sends the PIN by email. </p>\n</blockquote>\n<h5 id=\"status-code\">STATUS CODE</h5>\n<p><code>201</code> = Email sent and Validation created.</p>\n<h5 id=\"returns-text\">RETURNS TEXT</h5>\n<p>email</p>\n<h5 id=\"japer-app-equivalent\">JAPER APP EQUIVALENT</h5>\n<p><a href=\"https://www.japer.vision/?j=JAPER-APP+goto:validate-email\"><img src=\"https://i.imgur.com/dmwQjk3.png\" alt=\"JAPER-APP+goto:validate-email\" width=\"200\" height=\"200\" /></a></p>\n",
             "urlObject": {
               "path": [
                 "device",
@@ -2398,7 +2351,7 @@ SOFTWARE.
               "raw": ""
             },
             "url": "https://api.japer.io/v1/x/validate/device/sms",
-            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Creates a pending validation for the device and an SMS is sent containing the PIN. </p>\n</blockquote>\n<h5 id=\"status-codes\">STATUS CODES</h5>\n<p><code>201</code> = SMS sent and Validation created.</p>\n<p><code>202</code> = SMS not sent because zero data exists.</p>\n<h5 id=\"returns-text\">RETURNS TEXT</h5>\n<p><code>201</code> = sms</p>\n<p><code>202</code> = fail</p>\n<h5 id=\"japer-app-equivalent\">JAPER APP EQUIVALENT</h5>\n<p><a href=\"https://www.japer.vision/?j=JAPER-APP+goto:validate-sms\"><img src=\"https://i.imgur.com/w6KtH1c.png\" alt=\"JAPER-APP+goto-validate-sms\" width=\"200\" height=\"200\" /></a></p>\n",
+            "description": "<p><a href=\"https://www.japer.technology\"><img src=\"https://s3-ap-southeast-2.amazonaws.com/about.japer.cloud/JAPER-Black-Name-192x37.gif\" width=\"94\" height=\"18\" /></a></p>\n<blockquote>\n<p>Issues a one-time PIN challenge for device\u2013mobile binding and sends the PIN by SMS when applicable. </p>\n</blockquote>\n<h5 id=\"status-codes\">STATUS CODES</h5>\n<p><code>201</code> = SMS sent and Validation created.</p>\n<p><code>202</code> = SMS not sent because zero data exists.</p>\n<h5 id=\"returns-text\">RETURNS TEXT</h5>\n<p><code>201</code> = sms</p>\n<p><code>202</code> = fail</p>\n<h5 id=\"japer-app-equivalent\">JAPER APP EQUIVALENT</h5>\n<p><a href=\"https://www.japer.vision/?j=JAPER-APP+goto:validate-sms\"><img src=\"https://i.imgur.com/w6KtH1c.png\" alt=\"JAPER-APP+goto-validate-sms\" width=\"200\" height=\"200\" /></a></p>\n",
             "urlObject": {
               "path": [
                 "device",
