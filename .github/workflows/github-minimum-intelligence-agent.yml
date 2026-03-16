@@ -1,0 +1,510 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  GitHub Minimum Intelligence — Agent Workflow (Version 1.0.7)                ║
+# ║                                                                              ║
+# ║  An AI agent that lives inside your GitHub repository. It uses Issues as     ║
+# ║  a conversational UI, Git for persistent memory, and Actions as its only     ║
+# ║  compute layer. No external servers or infrastructure required.              ║
+# ║                                                                              ║
+# ║  QUICK START — copy this file into your repo and you're 4 steps away:        ║
+# ║                                                                              ║
+# ║    1. Copy this file → .github/workflows/ in your repository.                ║
+# ║    2. Add an LLM API key as a repository secret                              ║
+# ║       (Settings → Secrets and variables → Actions).                          ║
+# ║       At minimum, add ONE of:                                                ║
+# ║         • OPENAI_API_KEY          (OpenAI — default provider)                ║
+# ║         • ANTHROPIC_API_KEY       (Anthropic Claude)                         ║
+# ║         • GEMINI_API_KEY          (Google Gemini)                            ║
+# ║         • XAI_API_KEY             (xAI Grok)                                 ║
+# ║         • OPENROUTER_API_KEY      (OpenRouter / DeepSeek)                    ║
+# ║         • MISTRAL_API_KEY         (Mistral)                                  ║
+# ║         • GROQ_API_KEY            (Groq)                                     ║
+# ║    3. Run the workflow manually:                                             ║
+# ║       Actions → github-minimum-intelligence-agent → Run workflow.            ║
+# ║       This installs the agent folder into your repo (or upgrades it).        ║
+# ║    4. Open an issue — the agent reads your message and replies!              ║
+# ║                                                                              ║
+# ║  HOW IT WORKS:                                                               ║
+# ║    • Every issue is a conversation thread. Comment again to continue.        ║
+# ║    • The agent commits every response to git — full history, full recall.    ║
+# ║    • Only repo collaborators with write access (or higher) can trigger       ║
+# ║      the agent. Unauthorized users are silently rejected.                    ║
+# ║                                                                              ║
+# ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                   ║
+# ║    run-install   — Self-installer and upgrader (workflow_dispatch only).     ║
+# ║    run-agent     — AI agent that responds to issues and comments.            ║
+# ║    run-gitpages  — Publishes the agent's public-fabric to GitHub Pages.      ║
+# ║                                                                              ║
+# ║  Docs: https://github.com/japer-technology/github-minimum-intelligence       ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+name: github-minimum-intelligence-agent
+
+# ──────────────────────────────────────────────────────────────────────────────
+# TRIGGERS
+# The workflow listens for four distinct GitHub events. Each event activates
+# a different job (see the `if:` guards on each job below).
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  # 1. A new issue is opened → the agent reads it and posts an AI response.
+  issues:
+    types: [opened]
+
+  # 2. A comment is added to an existing issue → the agent continues the
+  #    conversation, loading the full session history from git.
+  issue_comment:
+    types: [created]
+
+  # 3. Code is pushed to main → triggers a GitHub Pages deployment so the
+  #    agent's public-fabric site stays up to date.
+  #    paths-ignore ensures that editing this workflow file alone does NOT
+  #    trigger a redundant Pages deploy.
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - ".github/workflows/**"
+
+  # 4. Manual "Run workflow" button → installs the agent folder into your
+  #    repository, or upgrades it when a newer version is available.
+  #    Safe to re-run; it installs, upgrades, or skips as appropriate.
+  workflow_dispatch:
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PERMISSIONS
+# These are the minimum permissions the workflow needs. GitHub Actions uses
+# a least-privilege model; each permission listed here is required for a
+# specific reason documented below.
+# ──────────────────────────────────────────────────────────────────────────────
+permissions:
+  contents: write   # Commit agent responses, session state, and installed files to the repo.
+  issues: write     # Post AI replies as issue comments and add reaction indicators (🚀 / 👍).
+  actions: write    # Allow the run-install job to push commits that subsequently trigger workflows.
+  pages: write      # Upload and deploy the agent's public-fabric site to GitHub Pages.
+  id-token: write   # Required by actions/deploy-pages for secure OIDC-based Pages deployment.
+
+# ══════════════════════════════════════════════════════════════════════════════
+# JOBS
+# ══════════════════════════════════════════════════════════════════════════════
+jobs:
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 1 — run-install
+  #
+  # Purpose : Self-installer and upgrader. Downloads the latest agent folder
+  #           from the template repository and commits it into YOUR repo.
+  #           If the agent is already installed at the latest version, it skips.
+  # Trigger : workflow_dispatch (manual "Run workflow" button only).
+  # Safe    : Re-running is always safe — it installs, upgrades, or skips.
+  # ────────────────────────────────────────────────────────────────────────────
+  run-install:
+    runs-on: ubuntu-latest
+    # Only run when triggered manually via the Actions UI.
+    # Skip when running inside the template repository itself — the run-install job
+    # downloads FROM that repo, so running it there would be self-referential.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      && github.repository != 'japer-technology/github-minimum-intelligence'
+    steps:
+
+      # 1. Check out the repository so we can inspect and modify its contents.
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # Always operate on the default branch (usually "main").
+          ref: ${{ github.event.repository.default_branch }}
+
+      # 2. Determine whether to install, upgrade, or skip.
+      #    • No folder       → action=install
+      #    • Folder present, local VERSION < template VERSION → action=upgrade
+      #    • Folder present, local VERSION >= template VERSION → action=skip
+      - name: Check for .github-minimum-intelligence
+        id: check-folder
+        run: |
+          if [ ! -d ".github-minimum-intelligence" ]; then
+            echo "action=install" >> "$GITHUB_OUTPUT"
+            echo "📦 .github-minimum-intelligence not found — will install."
+          else
+            LOCAL_VERSION="0.0.0"
+            if [ -f ".github-minimum-intelligence/VERSION" ]; then
+              LOCAL_VERSION=$(tr -d '[:space:]' < .github-minimum-intelligence/VERSION)
+            fi
+
+            # Fetch only the VERSION file from the template repository.
+            REMOTE_VERSION=$(curl -fsSL "https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/VERSION" | tr -d '[:space:]' || true)
+
+            if [ -z "$REMOTE_VERSION" ]; then
+              echo "::warning::Could not fetch remote VERSION — skipping upgrade check."
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            echo "Local VERSION:  $LOCAL_VERSION"
+            echo "Remote VERSION: $REMOTE_VERSION"
+
+            # Validate that both versions look like semver (digits and dots).
+            SEMVER_RE='^[0-9]+\.[0-9]+\.[0-9]+$'
+            if ! [[ "$LOCAL_VERSION" =~ $SEMVER_RE ]] || ! [[ "$REMOTE_VERSION" =~ $SEMVER_RE ]]; then
+              echo "::warning::VERSION format is not valid semver — skipping upgrade check."
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            # Compare semver components (major.minor.patch).
+            IFS='.' read -r L_MAJOR L_MINOR L_PATCH <<< "$LOCAL_VERSION"
+            IFS='.' read -r R_MAJOR R_MINOR R_PATCH <<< "$REMOTE_VERSION"
+
+            NEEDS_UPGRADE=false
+            if [ "$R_MAJOR" -gt "$L_MAJOR" ]; then
+              NEEDS_UPGRADE=true
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -gt "$L_MINOR" ]; then
+              NEEDS_UPGRADE=true
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -eq "$L_MINOR" ] && [ "$R_PATCH" -gt "$L_PATCH" ]; then
+              NEEDS_UPGRADE=true
+            fi
+
+            if [ "$NEEDS_UPGRADE" = true ]; then
+              echo "action=upgrade" >> "$GITHUB_OUTPUT"
+              echo "⬆️  Upgrade available: $LOCAL_VERSION → $REMOTE_VERSION"
+            else
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              echo "✅ Local version ($LOCAL_VERSION) >= remote version ($REMOTE_VERSION) — nothing to do."
+            fi
+          fi
+
+      # 3. Download the template repository as a zip, extract it, and either
+      #    install fresh or upgrade the existing agent folder.
+      #    On fresh install: copies the agent folder and initialises defaults.
+      #    On upgrade: preserves user files (AGENTS.md, .pi/, state/), replaces
+      #    framework files, and restores the backups.
+      - name: Download and install from template
+        if: steps.check-folder.outputs.action != 'skip'
+        run: |
+          set -euo pipefail
+
+          ACTION="${{ steps.check-folder.outputs.action }}"
+          TARGET=".github-minimum-intelligence"
+
+          # Download the latest template from the main branch.
+          curl -fsSL "https://github.com/japer-technology/github-minimum-intelligence/archive/refs/heads/main.zip" \
+            -o /tmp/template.zip
+          unzip -q /tmp/template.zip -d /tmp/template
+
+          EXTRACTED=$(ls -d /tmp/template/github-minimum-intelligence-*)
+
+          # Remove items from the extracted template that must not be copied
+          # into the user's repo (heavy dependencies and internal analysis).
+          rm -rf "$EXTRACTED/$TARGET/node_modules"
+          rm -rf "$EXTRACTED/$TARGET/docs/analysis"
+          rm -rf "$EXTRACTED/$TARGET/public-fabric"
+
+          if [ "$ACTION" = "upgrade" ]; then
+            # Back up user-customised files before replacing framework files.
+            BACKUP="/tmp/mi-backup"
+            mkdir -p "$BACKUP"
+            if [ -f "$TARGET/AGENTS.md" ]; then cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"; fi
+            if [ -d "$TARGET/.pi" ];       then cp -R "$TARGET/.pi" "$BACKUP/.pi"; fi
+            if [ -d "$TARGET/state" ];     then cp -R "$TARGET/state" "$BACKUP/state"; fi
+
+            rm -rf "$TARGET"
+            cp -R "$EXTRACTED/$TARGET" "$TARGET"
+
+            # Remove the source repo's session state.
+            rm -rf "$TARGET/state"
+
+            # Restore user-customised files from backup.
+            if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
+            if [ -d "$BACKUP/.pi" ];       then cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
+            if [ -d "$BACKUP/state" ];     then cp -R "$BACKUP/state" "$TARGET/state"; fi
+          else
+            # Fresh install.
+            cp -R "$EXTRACTED/$TARGET" "$TARGET"
+
+            # Remove the source repo's session state — each repo starts fresh.
+            rm -rf "$TARGET/state"
+
+            # Initialise defaults for a fresh install:
+            #   • AGENTS.md — the agent's identity file (editable by the user).
+            #   • settings.json — default LLM provider and model configuration.
+            cp "$TARGET/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET/AGENTS.md"
+            mkdir -p "$TARGET/.pi"
+            cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
+          fi
+
+      # 4. Ensure common ignore patterns are present in .gitignore so that
+      #    node_modules and OS junk files never get committed.
+      - name: Ensure .gitignore entries
+        if: steps.check-folder.outputs.action != 'skip'
+        run: |
+          touch .gitignore
+          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store"; do
+            grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
+          done
+
+      # 4b. Ensure required Git attributes are present in .gitattributes so
+      #     that the append-only memory log merges correctly across parallel
+      #     agent runs (union merge driver).
+      - name: Ensure .gitattributes entries
+        if: steps.check-folder.outputs.action != 'skip'
+        run: |
+          touch .gitattributes
+          for entry in "memory.log merge=union"; do
+            grep -qxF "$entry" .gitattributes || echo "$entry" >> .gitattributes
+          done
+
+      # 5. Commit and push. Uses the appropriate message for install vs upgrade.
+      #    If nothing changed (edge case), the step is a harmless no-op.
+      - name: Commit and push
+        if: steps.check-folder.outputs.action != 'skip'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add .github-minimum-intelligence/ .gitignore .gitattributes
+
+          ACTION="${{ steps.check-folder.outputs.action }}"
+          if [ "$ACTION" = "upgrade" ]; then
+            COMMIT_MSG="chore: upgrade .github-minimum-intelligence from template"
+          else
+            COMMIT_MSG="chore: install .github-minimum-intelligence from template"
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "$COMMIT_MSG"
+            git push
+          fi
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 2 — run-agent
+  #
+  # Purpose : The core AI agent. Reads the issue (or comment), loads the
+  #           conversation session from git, sends it to the configured LLM,
+  #           and posts the response back as an issue comment.
+  # Trigger : issues.opened OR issue_comment.created (ignoring bot comments).
+  # Security: Only collaborators with write/maintain/admin access can trigger.
+  # ────────────────────────────────────────────────────────────────────────────
+  run-agent:
+    runs-on: ubuntu-latest
+
+    # Concurrency: one agent run per issue at a time. If the user posts two
+    # comments quickly, the second run waits for the first to finish rather
+    # than cancelling it (cancel-in-progress: false). The group key includes
+    # the issue number so different issues run in parallel.
+    concurrency:
+      group: github-minimum-intelligence-${{ github.repository }}-issue-${{ github.event.issue.number }}
+      cancel-in-progress: false
+
+    # Trigger guard:
+    #   • Run on new issues.
+    #   • Run on issue comments, BUT skip comments posted by bots (the agent
+    #     itself) to avoid infinite loops.
+    if: >-
+      (github.event_name == 'issues')
+      || (github.event_name == 'issue_comment' && !endsWith(github.event.comment.user.login, '[bot]'))
+    steps:
+
+      # 1. AUTHORIZATION — verify the actor has write-level (or higher) access
+      #    to the repository. This prevents random users on public repos from
+      #    consuming your LLM credits. On success a 🚀 reaction is added to
+      #    signal the agent is working; the reaction state is saved to a temp
+      #    file so the agent can later replace it with 👍 on completion.
+      - name: Authorize
+        id: authorize
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Query the GitHub API for the actor's permission level on this repo.
+          PERM=$(gh api "repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission" --jq '.permission' 2>/dev/null || echo "none")
+          echo "Actor: ${{ github.actor }}, Permission: $PERM"
+
+          # Reject anyone below write access.
+          if [[ "$PERM" != "admin" && "$PERM" != "maintain" && "$PERM" != "write" ]]; then
+            echo "::error::Unauthorized: ${{ github.actor }} has '$PERM' permission"
+            exit 1
+          fi
+
+          # Add a 🚀 "rocket" reaction to the comment or issue as a visual
+          # indicator that the agent has started processing. Save the reaction
+          # ID so the agent can swap it for 👍 when it finishes.
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            REACTION_ID=$(gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=rocket --jq '.id' 2>/dev/null || echo "")
+            if [[ -n "$REACTION_ID" ]]; then RID_JSON="\"$REACTION_ID\""; else RID_JSON="null"; fi
+            echo '{"reactionId":'"$RID_JSON"',"reactionTarget":"comment","commentId":${{ github.event.comment.id }},"issueNumber":${{ github.event.issue.number }},"repo":"${{ github.repository }}"}' > /tmp/reaction-state.json
+          else
+            REACTION_ID=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/reactions" -f content=rocket --jq '.id' 2>/dev/null || echo "")
+            if [[ -n "$REACTION_ID" ]]; then RID_JSON="\"$REACTION_ID\""; else RID_JSON="null"; fi
+            echo '{"reactionId":'"$RID_JSON"',"reactionTarget":"issue","commentId":null,"issueNumber":${{ github.event.issue.number }},"repo":"${{ github.repository }}"}' > /tmp/reaction-state.json
+          fi
+
+      # 2. REJECTION FEEDBACK — if authorization failed, add a 👎 reaction so
+      #    the user gets immediate visual feedback that their request was denied.
+      - name: Reject
+        if: ${{ failure() && steps.authorize.outcome == 'failure' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=-1
+          else
+            gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/reactions" -f content=-1
+          fi
+
+      # 3. CHECKOUT — clone the full repository (fetch-depth: 0) so the agent
+      #    can read prior session history, project files, and commit new state.
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0   # Full history needed — the agent reads and commits session state.
+
+      # 4. SAFETY CHECK — ensure the agent folder exists. If the user hasn't
+      #    run the run-install job yet, skip gracefully instead of crashing.
+      - name: Check for .github-minimum-intelligence
+        id: check-folder
+        run: |
+          if [ -d ".github-minimum-intelligence" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::.github-minimum-intelligence folder not found, skipping."
+          fi
+
+      # 5. RUNTIME — install Bun, a fast JavaScript/TypeScript runtime. The
+      #    agent code (lifecycle/agent.ts) runs directly under Bun without a
+      #    separate compile step.
+      - name: Setup Bun
+        if: steps.check-folder.outputs.exists == 'true'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2"   # Pinned for reproducible builds across runs.
+
+      # 6. CACHE — restore node_modules from a prior run when bun.lock hasn't
+      #    changed. Shaves ~5-10 seconds off the typical cold-start install.
+      - name: Cache dependencies
+        if: steps.check-folder.outputs.exists == 'true'
+        uses: actions/cache@v5
+        with:
+          path: .github-minimum-intelligence/node_modules
+          key: mi-deps-${{ hashFiles('.github-minimum-intelligence/bun.lock') }}
+
+      # 7. INSTALL — install (or verify) the agent's npm dependencies.
+      #    --frozen-lockfile ensures the lockfile is never modified, so builds
+      #    are deterministic.
+      - name: Install dependencies
+        if: steps.check-folder.outputs.exists == 'true'
+        run: cd .github-minimum-intelligence && bun install --frozen-lockfile
+
+      # 8. RUN THE AGENT — execute the core agent script. It reads the
+      #    triggering issue/comment, loads the matching conversation session,
+      #    calls the configured LLM, posts the reply, and commits state.
+      #
+      #    All supported LLM provider keys are passed as environment variables.
+      #    Only the key for your chosen provider needs to be set as a secret;
+      #    the others will simply be empty and are safely ignored.
+      - name: Run
+        if: steps.check-folder.outputs.exists == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun .github-minimum-intelligence/lifecycle/agent.ts
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 3 — run-gitpages
+  #
+  # Purpose : Publish the agent's public-fabric directory as a GitHub Pages
+  #           site. This gives you a live web page powered by the agent's
+  #           public output — no separate hosting needed.
+  # Trigger : push to main (i.e. after the agent commits, or any manual push).
+  # Note    : Pages is automatically enabled on first run. If auto-enable
+  #           fails, a warning guides the user to enable it manually.
+  # ────────────────────────────────────────────────────────────────────────────
+  run-gitpages:
+    # Run after agent/install jobs finish. On push events those jobs are
+    # skipped so run-gitpages starts immediately.
+    needs: [run-agent, run-install]
+    # always() ensures the job runs even when upstream jobs are skipped;
+    # !cancelled() still respects manual cancellation.
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+
+    # Concurrency: only one Pages deployment at a time across the entire repo.
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    # Declare the GitHub Pages deployment environment so the workflow run UI
+    # shows a direct link to the deployed site.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # 1. Check out the repo so we can read the public-fabric directory.
+      #    ref: main ensures we pick up any commits the agent just pushed.
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      # 2. Verify the public-fabric directory exists. If the agent has not
+      #    been installed yet (e.g. on a fresh template repo) there is nothing
+      #    to deploy, so we abort early with a clear warning instead of
+      #    failing in a later step.
+      - name: Check public-fabric exists
+        id: check-folder
+        run: |
+          if [ -d ".github-minimum-intelligence/public-fabric" ]; then
+            echo "folder_exists=true" >> "$GITHUB_OUTPUT"
+            echo "✅ public-fabric directory found."
+          else
+            echo "folder_exists=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Directory .github-minimum-intelligence/public-fabric not found. Skipping Pages deployment. Run the installer first (Actions → Run workflow)."
+          fi
+
+      # 3. AUTO-ENABLE Pages — attempt to enable GitHub Pages via the API.
+      #    This is a convenience so users don't have to visit Settings manually.
+      #    If the API call fails (e.g. insufficient org permissions), a warning
+      #    is surfaced and the remaining deploy steps are skipped gracefully.
+      - name: Enable Pages
+        if: steps.check-folder.outputs.folder_exists == 'true'
+        id: enable-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if Pages is already active.
+          if gh api "repos/${{ github.repository }}/pages" --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages is already enabled."
+          # If not, try to enable it with the "workflow" build type.
+          elif gh api "repos/${{ github.repository }}/pages" \
+            -X POST -f build_type=workflow --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages has been enabled."
+          else
+            echo "pages_active=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Could not enable GitHub Pages automatically. Please enable it manually in repository Settings → Pages → Source → GitHub Actions."
+          fi
+
+      # 4. Configure Pages — sets up the required Pages metadata.
+      - name: Setup Pages
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        uses: actions/configure-pages@v5
+
+      # 5. Upload the public-fabric directory as a Pages artifact.
+      - name: Upload artifact
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.github-minimum-intelligence/public-fabric'
+
+      # 6. Deploy the uploaded artifact to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
