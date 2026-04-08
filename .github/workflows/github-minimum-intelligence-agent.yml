@@ -1,5 +1,5 @@
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  GitHub Minimum Intelligence — Agent Workflow (Version 1.0.7)                ║
+# ║  GitHub Minimum Intelligence — Agent Workflow (Version 1.1.4)                ║
 # ║                                                                              ║
 # ║  An AI agent that lives inside your GitHub repository. It uses Issues as     ║
 # ║  a conversational UI, Git for persistent memory, and Actions as its only     ║
@@ -76,7 +76,7 @@ on:
 # ──────────────────────────────────────────────────────────────────────────────
 permissions:
   contents: write   # Commit agent responses, session state, and installed files to the repo.
-  issues: write     # Post AI replies as issue comments and add reaction indicators (🚀 / 👍).
+  issues: write     # Post AI replies as issue comments and add reaction indicators (� / �).
   actions: write    # Allow the run-install job to push commits that subsequently trigger workflows.
   pages: write      # Upload and deploy the agent's public-fabric site to GitHub Pages.
   id-token: write   # Required by actions/deploy-pages for secure OIDC-based Pages deployment.
@@ -121,7 +121,7 @@ jobs:
         run: |
           if [ ! -d ".github-minimum-intelligence" ]; then
             echo "action=install" >> "$GITHUB_OUTPUT"
-            echo "📦 .github-minimum-intelligence not found — will install."
+            echo "� .github-minimum-intelligence not found — will install."
           else
             LOCAL_VERSION="0.0.0"
             if [ -f ".github-minimum-intelligence/VERSION" ]; then
@@ -198,7 +198,11 @@ jobs:
 
           if [ "$ACTION" = "upgrade" ]; then
             # Back up user-customised files before replacing framework files.
+            # Always start with a clean backup directory — a stale backup from a
+            # previous run (on persistent runners) would cause cp -R to nest
+            # directories inside themselves (.pi/.pi/.pi).
             BACKUP="/tmp/mi-backup"
+            rm -rf "$BACKUP"
             mkdir -p "$BACKUP"
             if [ -f "$TARGET/AGENTS.md" ]; then cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"; fi
             if [ -d "$TARGET/.pi" ];       then cp -R "$TARGET/.pi" "$BACKUP/.pi"; fi
@@ -211,9 +215,18 @@ jobs:
             rm -rf "$TARGET/state"
 
             # Restore user-customised files from backup.
+            # Remove destination dirs first so cp -R creates them fresh
+            # instead of nesting the source inside an existing directory.
             if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
-            if [ -d "$BACKUP/.pi" ];       then cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
-            if [ -d "$BACKUP/state" ];     then cp -R "$BACKUP/state" "$TARGET/state"; fi
+            if [ -d "$BACKUP/.pi" ];       then rm -rf "$TARGET/.pi"; cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
+            if [ -d "$BACKUP/state" ];     then rm -rf "$TARGET/state"; cp -R "$BACKUP/state" "$TARGET/state"; fi
+
+            # Defensive cleanup: remove any nested .pi directories that may have
+            # been created by prior runs affected by the cp -R nesting bug.
+            if [ -d "$TARGET/.pi/.pi" ]; then
+              echo "⚠️  Removing nested .pi/.pi directory (artifact of prior nesting bug)."
+              rm -rf "$TARGET/.pi/.pi"
+            fi
           else
             # Fresh install.
             cp -R "$EXTRACTED/$TARGET" "$TARGET"
@@ -230,12 +243,13 @@ jobs:
           fi
 
       # 4. Ensure common ignore patterns are present in .gitignore so that
-      #    node_modules and OS junk files never get committed.
+      #    node_modules, OS junk files, and the pi agent's auto-created .pi/
+      #    directory at the repo root never get committed.
       - name: Ensure .gitignore entries
         if: steps.check-folder.outputs.action != 'skip'
         run: |
           touch .gitignore
-          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store"; do
+          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store" "/.pi/"; do
             grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
           done
 
@@ -280,7 +294,7 @@ jobs:
   # Purpose : The core AI agent. Reads the issue (or comment), loads the
   #           conversation session from git, sends it to the configured LLM,
   #           and posts the response back as an issue comment.
-  # Trigger : issues.opened OR issue_comment.created (ignoring bot comments).
+  # Trigger : issues.opened OR issue_comment.created (ignoring bot & PR comments).
   # Security: Only collaborators with write/maintain/admin access can trigger.
   # ────────────────────────────────────────────────────────────────────────────
   run-agent:
@@ -297,17 +311,18 @@ jobs:
     # Trigger guard:
     #   • Run on new issues.
     #   • Run on issue comments, BUT skip comments posted by bots (the agent
-    #     itself) to avoid infinite loops.
+    #     itself) to avoid infinite loops, AND skip comments on pull requests
+    #     (issue_comment fires for both issues and PRs).
     if: >-
       (github.event_name == 'issues')
-      || (github.event_name == 'issue_comment' && !endsWith(github.event.comment.user.login, '[bot]'))
+      || (github.event_name == 'issue_comment' && !github.event.issue.pull_request && !endsWith(github.event.comment.user.login, '[bot]'))
     steps:
 
       # 1. AUTHORIZATION — verify the actor has write-level (or higher) access
       #    to the repository. This prevents random users on public repos from
-      #    consuming your LLM credits. On success a 🚀 reaction is added to
+      #    consuming your LLM credits. On success a � reaction is added to
       #    signal the agent is working; the reaction state is saved to a temp
-      #    file so the agent can later replace it with 👍 on completion.
+      #    file so the agent can later replace it with � on completion.
       - name: Authorize
         id: authorize
         env:
@@ -323,9 +338,9 @@ jobs:
             exit 1
           fi
 
-          # Add a 🚀 "rocket" reaction to the comment or issue as a visual
+          # Add a � "rocket" reaction to the comment or issue as a visual
           # indicator that the agent has started processing. Save the reaction
-          # ID so the agent can swap it for 👍 when it finishes.
+          # ID so the agent can swap it for � when it finishes.
           if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
             REACTION_ID=$(gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=rocket --jq '.id' 2>/dev/null || echo "")
             if [[ -n "$REACTION_ID" ]]; then RID_JSON="\"$REACTION_ID\""; else RID_JSON="null"; fi
@@ -336,7 +351,7 @@ jobs:
             echo '{"reactionId":'"$RID_JSON"',"reactionTarget":"issue","commentId":null,"issueNumber":${{ github.event.issue.number }},"repo":"${{ github.repository }}"}' > /tmp/reaction-state.json
           fi
 
-      # 2. REJECTION FEEDBACK — if authorization failed, add a 👎 reaction so
+      # 2. REJECTION FEEDBACK — if authorization failed, add a � reaction so
       #    the user gets immediate visual feedback that their request was denied.
       - name: Reject
         if: ${{ failure() && steps.authorize.outcome == 'failure' }}
